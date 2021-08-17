@@ -1,0 +1,37 @@
+package com.simplytesting.cartax.tests;
+
+
+import java.util.List;
+
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openqa.selenium.WebDriver;
+
+import com.simplytesting.cartax.tasks.CarTax_Tasks;
+import com.simplytesting.fw.utils.RunObject;
+
+public class CarTaxTests01 {
+	private String SOURCE = this.getClass().getSimpleName();
+	private static WebDriver driver;
+	private RunObject runObject;
+
+
+	@Test
+	public void InputTests()	{
+		CarTax_Tasks tasks = new CarTax_Tasks(runObject.logFile);
+		List<String> regNumbers = tasks.getReg(runObject.dataDir + "car_input.txt");
+		runObject = new RunObject("CarTaxTests01");
+		runObject.StartBrowser();
+		driver = runObject.driver;
+		runObject.NavigateTo(runObject.baseURL);
+		for (int i=0; i<regNumbers.size(); i++)	{
+			tasks.RunNextReg(regNumbers<i>);
+		}
+	}
+	
+	@AfterClass
+	public static void TearDown()	{
+		driver.quit();	
+	}
+}

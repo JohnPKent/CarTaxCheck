@@ -1,0 +1,65 @@
+package com.simplytesting.cartax.tasks;
+
+import java.io.IOException;
+
+import org.junit.Assert;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import com.simplytesting.fw.utils.InputFile;
+import com.simplytesting.fw.utils.OutputFile;
+
+public class CarTax_Tasks {
+	private OutputFile logFile;
+	private String inputFileName;
+	private InputFile inputDataFile;
+	private String expectedResultsFileName;
+	private InputFile expectedResultsFile;
+
+	public CarTax_Tasks(OutputFile logFile)	{
+		this.logFile = logFile;
+	}
+
+	public void setinputFileName(String inFileName)	{
+		this.inputFileName = inFileName;
+	}
+	public void setExpectedDataFile(String inFile)	{
+		this.expectedResultsFileName = inFile;
+	}
+
+	public List<String> getReg(String inFileName)	{
+		this.inputFileName = inFileName;
+	    List<String> result = null;
+		String inputFileText = null;
+		String regExpressionPattern = "[A-Z]{2}[0-9]{2}[ ]{0,1}[A-Z]{3}";
+		// Open file:
+		inputDataFile = new InputFile(inputFileName);
+		try {
+			inputFileText = inputDataFile.readAllFile();
+		}catch (Exception e)	{
+			String msg = "Failure: unable to open Input Data File '" + e.getMessage() + "'";
+			logFile.write(msg);
+			Assert.fail(msg);
+		}
+	    Pattern pattern = Pattern.compile(regExpressionPattern);
+	    Matcher matcher = pattern.matcher(inputFileText);
+	    if (matcher.find()) {
+	        result = new ArrayList<String>();
+	        result.add(matcher.group());
+
+	        while (matcher.find()) {
+	            result.add(matcher.group());
+	        }
+	    }
+	    return result;				
+	}
+
+	public void RunNextReg(String regNumb) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

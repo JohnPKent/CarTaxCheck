@@ -1,0 +1,386 @@
+package com.simplytesting.fw.utils;
+
+import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+
+import java.awt.AWTException;
+import java.awt.Rectangle;
+import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+ 
+
+import javax.imageio.ImageIO;
+
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
+
+public class SeleniumUtils {
+    private static final String SOURCE = "    SELENIUMUTILS";
+	private static  String sScreenshotDir;
+	private static WebDriver driver;
+	private static OutputFile logFile;
+	//************************************************************************************
+	//***                       Test Liberation Framework
+	//***                 Copyright Simply Testing Ltd  2016 to 2019
+	//************************************************************************************
+
+
+	public SeleniumUtils(String sScreenshotDir, OutputFile logFile)
+	{
+		this.sScreenshotDir = sScreenshotDir;
+		this.logFile = logFile;
+	}
+	public static void setDriver(WebDriver Driver)
+	{
+		driver = Driver;
+	}
+	public static WebDriver getDriver()
+	{
+		return driver;
+	}
+	public static void TakePicture()
+	{
+		if (driver == null)
+		{
+			logFile.write(SOURCE, "Driver is not instantiated so not taking picture" );
+			return;
+		}
+
+		DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmssSSSS");
+		Date date = new Date();
+		  
+		String sSSFileName =  sScreenshotDir + "Screenshot_" + dateFormat.format(date) + ".png";
+		try
+		{
+			File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+			// Now you can do whatever you need to do with it, for example copy somewhere
+			/////////////FileUtils.copyFile(scrFile, new File(sSSFileName));			
+			logFile.write(SOURCE, "Picture saved to " + sSSFileName);
+		}
+		catch (Exception e)
+		{
+			 logFile.write(SOURCE, "FAILURE: when taking picture.  Exception:" + e.getMessage());
+		}
+		//TakePicture_FullScreen();
+	}
+	public static void TakePicture_FullScreen()
+	{
+		  DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmssSSSS");
+		  Date date = new Date();
+		  
+		  String sSSFileName =  sScreenshotDir + "ScreenshotFullScr_" + dateFormat.format(date) + ".jpg";
+		  try 
+		  {
+	            Robot robot = new Robot(); 
+	            Rectangle scrRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
+	            BufferedImage screenFullImage = robot.createScreenCapture(scrRect);
+	            ImageIO.write(screenFullImage, "jpg", new File(sSSFileName));
+	             
+				logFile.write(SOURCE, "Picture saved to " + sSSFileName);
+		  }
+			catch (Exception e)
+			{
+				 logFile.write(SOURCE, "FAILURE: when taking full screen picture.  Exception:" + e.getMessage());
+		    }
+	}
+	public static String[] removeBlankArrayItems(String[] sArray)
+	{
+	    //Remove empty items at the end
+		int i;
+    	Boolean bFoundBlank = false;
+		for (i = sArray.length-1; i > 4; i--)
+	    {
+	        if (sArray[i].equals(""))
+	        {
+	        	bFoundBlank = true;
+	        }
+	    }
+		if (bFoundBlank)	{
+			i = i+1;
+			String[] sCopy = new String[i];
+			System.arraycopy(sArray, 0, sCopy, 0, i);
+			return sCopy;
+		}else	{
+			return sArray;
+		}
+	}
+    //************************************************************************************************
+    //Check Methods.
+    //************************************************************************************************
+	public static boolean CheckText(String sAction, String sData, String sText, boolean bCaseIndependant)
+	{
+		String sTextCompare;
+		String sDataCompare;
+        if (bCaseIndependant)
+        {
+        	sTextCompare = sText.toLowerCase();
+        	sDataCompare = sData.toLowerCase();
+            logFile.write(SOURCE, String.format("%s: Performing case independent comparison", sAction));
+        }else
+        {
+        	sTextCompare = sText;
+        	sDataCompare = sData;
+            logFile.write(SOURCE, String.format("%s: Performing case sensitive comparison", sAction));
+        }
+
+        if (sTextCompare.equals(sDataCompare))
+        {
+            logFile.write(SOURCE, String.format("%s=PASS Retrieved Value is: '%s' and it contains '%s'", sAction, sText, sData));
+            return(true);
+        }
+        else    {
+            logFile.write(SOURCE, String.format("%s=FAILURE: Retrieved Value is: '%s' - Expected text is: '%s'", sAction, sText, sData));
+            return(false);
+        }
+
+	}
+	public static boolean CheckTextContains(String sAction, String sData, String sText, boolean bCaseIndependant)
+	{
+		String sTextCompare;
+		String sDataCompare;
+        if (bCaseIndependant)
+        {
+        	sTextCompare = sText.toLowerCase();
+        	sDataCompare = sData.toLowerCase();
+            logFile.write(SOURCE, String.format("%s: Performing case independent comparison", sAction));
+        }else
+        {
+        	sTextCompare = sText;
+        	sDataCompare = sData;
+            logFile.write(SOURCE, String.format("%s: Performing case sensitive comparison", sAction));
+        }
+
+        if (sTextCompare.contains(sDataCompare))
+        {
+            logFile.write(SOURCE, String.format("%s=PASS: Retrieved Value is: '%s' and it contains '%s'", sAction, sText, sData));
+            return(true);
+        }else    
+        {
+            logFile.write(SOURCE, String.format("%s=FAILURE: Retrieved Value is: '%s' - Expected text is: '%s'", sAction, sText, sData));
+            return(false);
+        }
+
+	}
+	public static boolean CheckNumber(String sAction, int dNumberExpected, int dNumberActual)
+	{
+       if (dNumberActual == dNumberExpected)
+        {
+            logFile.write(SOURCE, String.format("%s=PASS Retrieved Value is: '%d' and it equals expected value of '%d'", sAction, dNumberActual, dNumberExpected));
+            return(true);
+        }else    
+        {
+            logFile.write(SOURCE, String.format("%s=FAILURE: Retrieved Value is: '%d' - Expected value is: '%d'", sAction, dNumberActual, dNumberExpected));
+            return(false);
+        }
+
+	}
+	public static boolean CheckDateTime(String sAction, String sData,
+			String sData2, String sText) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	public static boolean CheckText_AsNumberValue(String sAction, String sData, String sText) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+    public static void TakePicture_ScrollFullPage(WebDriver driver)
+    {
+        throw new UnsupportedOperationException("TODO", null);
+//	        int iPageFullHeight = 0;
+//	        int iPageVisibleHeight = 0;
+//	        String sPageFullHeight = "";
+//	        String sPageVisibleHeight = "";
+//	        String sDateTime = DateTime.Now.ToString("yyyy-MM-dd-HHmmssfff");
+//	        IJavaScriptExecutor js = driver as IJavaScriptExecutor;
+//	        if (driver == null)
+//	        {
+//	            logFile.write(SOURCE, "NOTE: Driver is not instantiated so cannot take picture at this time" );
+//	            return;
+//	        }
+//
+//	        try
+//	        {
+//	            sPageFullHeight = Convert.ToString(js.ExecuteScript("return window.document.body.scrollHeight"));
+//	            logFile.write(SOURCE, "Full Page Height = " +sPageFullHeight);
+//	            sPageVisibleHeight = Convert.ToString(js.ExecuteScript("return window.innerHeight"));
+//	            logFile.write(SOURCE, "Visible Part of Page Height = " +sPageVisibleHeight);
+//	            iPageFullHeight = Int32.Parse(sPageFullHeight);
+//	            iPageVisibleHeight = Int32.Parse(sPageVisibleHeight);
+//	        }
+//	        catch (Exception e)
+//	        {
+//	            logFile.write(SOURCE, "FAILURE: when executing JS to get scroll values.  Exception:" + e.Message);
+//	            return;
+//	        }
+//	        String sScrollAmount = (iPageVisibleHeight).ToString();
+//
+//	        int iNumberOfPics = (iPageFullHeight /  iPageVisibleHeight) + 1;
+//	        //=====================================================
+//	        //Ensure that we are at  the top of the page
+//	        //=====================================================
+//	        for (int i = 2; i <= iNumberOfPics; i++)
+//	        {
+//	            try
+//	            {
+//
+//	                String sJavaScript = "window.scrollBy(0, -" + sScrollAmount + ")";
+//	                logFile.write("    Scrolling up by -" + sScrollAmount);
+//	                js.ExecuteScript(sJavaScript);
+//	            }
+//	            catch (Exception e)
+//	            {
+//	                logFile.write(SOURCE, "FAILURE: when scrolling to top of page picture.  Exception:" + e.Message);
+//	                break;
+//	            }
+//	        }
+//	        //=====================================================
+//	        //Take Pictures
+//	        //=====================================================
+//	        String sSSFileName = sScreenshotDir + "Screenshot_" + sDateTime + "_PART1.jpg";
+//	        logFile.write("    Saving screenshot to:  " + sSSFileName);
+//	        Screenshot screenShot = ((ITakesScreenshot)driver).GetScreenshot();
+//	        screenShot.SaveAsFile(sSSFileName, ScreenshotImageFormat.Jpeg);
+//	        logFile.write(SOURCE, "Picture saved to " + sSSFileName);
+//	        for (int i = 2; i <= iNumberOfPics; i++)
+//	        {
+//	            try
+//	            {
+//
+//	                String sJavaScript = "window.scrollBy(0, " + sScrollAmount + ")";
+//	                logFile.write("    Scrolling by " + sScrollAmount);
+//	                js.ExecuteScript(sJavaScript);
+//	                sSSFileName = sScreenshotDir + "Screenshot_" + sDateTime + "_PART" +  i.ToString() + ".jpg";
+//	                logFile.write("    Saving screenshot to: " + sSSFileName);
+//	                screenShot = ((ITakesScreenshot)driver).GetScreenshot();
+//	                screenShot.SaveAsFile(sSSFileName, ScreenshotImageFormat.Jpeg);
+//	                logFile.write(SOURCE, "Picture saved to " + sSSFileName);
+//	            }
+//	            catch (Exception e)
+//	            {
+//	                logFile.write(SOURCE, "FAILURE: when taking picture.  Exception:" + e.Message);
+//	                break;
+//	            }
+//	        }
+    }
+
+
+
+    //************************************************************************************************
+    //Check Methods.
+    //************************************************************************************************
+    public static Boolean CheckText(String sAction, String sData, String sText, Boolean bCaseIndependant)
+    {
+        if (sData.equals("CHECK_IGNORE"))
+        { 
+            logFile.write(SOURCE, String.format("{0}: IGNORING comparison as overidden with '{1}'", sAction, sData));
+            return (true);
+        }
+        if (sAction.contains("_CONTAINS")  || sAction.contains("SUBSTR"))  //SUBSTR used in Tables as have containing keyword.
+        {
+            //Check for subString
+            return (CheckTextContains(sAction, sData, sText, true));
+        }
+        
+        String sTextCompare;
+        String sDataCompare;
+        if (bCaseIndependant)
+        {
+            sTextCompare = sText.toLowerCase();
+            sDataCompare = sData.toLowerCase();
+            logFile.write(SOURCE, String.format("{0}: Performing case independent comparison", sAction));
+        }
+        else
+        {
+            sTextCompare = sText;
+            sDataCompare = sData;
+            logFile.write(SOURCE, String.format("{0}: Performing case sensitive comparison", sAction));
+        }
+
+        if (sTextCompare.equals(sDataCompare))
+        {
+            logFile.write(SOURCE, String.format("{0}=PASS Retrieved Value is: '{1}' and it contains '{2}'", sAction, sText, sData));
+            return (true);
+        }
+        else
+        {
+            logFile.write(SOURCE, String.format("{0}=FAILURE: Retrieved Value is: '{1}' - Expected text is: '{2}'", sAction, sText, sData));
+            return (false);
+        }
+    }
+    public static Boolean CheckTextContains(String sAction, String sData, String sText, Boolean bCaseIndependant)
+    {
+        String sTextCompare;
+        String sDataCompare;
+         if (sData.equals("CHECK_IGNORE"))
+        { 
+            logFile.write(SOURCE, String.format("{0}: IGNORING comparison as overidden with '{1}'", sAction, sData));
+            return (true);
+        }
+       if (bCaseIndependant)
+        {
+            sTextCompare = sText.toLowerCase();
+            sDataCompare = sData.toLowerCase();
+            logFile.write(SOURCE, String.format("{0}: Performing case independent comparison", sAction));
+        }
+        else
+        {
+            sTextCompare = sText;
+            sDataCompare = sData;
+            logFile.write(SOURCE, String.format("{0}: Performing case sensitive comparison", sAction));
+        }
+
+        if (sTextCompare.contains(sDataCompare))
+        {
+            logFile.write(SOURCE, String.format("{0}=PASS: Retrieved Value is: '{1}' and it contains '{2}'", sAction, sText, sData));
+            return (true);
+        }
+        else
+        {
+            logFile.write(SOURCE, String.format("{0}=FAILURE: Retrieved Value is: '{1}' - Expected text is: '{2}'", sAction, sText, sData));
+            return (false);
+        }
+
+    }
+    public static Boolean CheckTextDoesNotContain(String sAction, String sData, String sText, Boolean bCaseIndependant)
+    {
+        String sTextCompare;
+        String sDataCompare;
+        if (sData.equals("CHECK_IGNORE"))
+        { 
+            logFile.write(SOURCE, String.format("{0}: IGNORING comparison as overidden with '{1}'", sAction, sData));
+            return (true);
+        }
+        if (bCaseIndependant)
+        {
+            sTextCompare = sText.toLowerCase();
+            sDataCompare = sData.toLowerCase();
+            logFile.write(SOURCE, String.format("{0}: Performing case independent comparison", sAction));
+        }
+        else
+        {
+            sTextCompare = sText;
+            sDataCompare = sData;
+            logFile.write(SOURCE, String.format("{0}: Performing case sensitive comparison", sAction));
+        }
+
+        if (sTextCompare.contains(sDataCompare))
+        {
+            logFile.write(SOURCE, String.format("{0}=FAILURE: Retrieved Value is: '{1}' - and contains: '{2}'", sAction, sText, sData));
+            return (false);
+        }
+        else
+        {
+            logFile.write(SOURCE, String.format("{0}=PASS: Retrieved Value is: '{1}' and it does not contain: '{2}'", sAction, sText, sData));
+            return (true);
+        }
+
+    }
+}

@@ -1,0 +1,6 @@
+package com.simplytesting.fw.utils;
+
+public class CheckExpectedResultsFile {
+	private String SOURCE = this.getClass().getSimpleName();
+
+}

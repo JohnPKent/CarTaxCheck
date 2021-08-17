@@ -1,0 +1,28 @@
+package com.simplytesting.fw.actions;
+
+import org.openqa.selenium.By;
+import com.simplytesting.fw.utils.RunObject;
+
+public class Click {
+	private static String thisclass = "Click";
+	
+	public static void on(RunObject runObject, By selector)	{
+		String selectorName = selector.toString();
+		
+		String actionName = thisclass+ "on";
+		String msg = " Clicking Object '" + selectorName + "'";
+		runObject.logFile.write("ACTION: " + actionName + msg);
+		
+		try	{
+			runObject.seleniumUtil.
+			
+		}catch (Exception e)	{
+			msg = "Resut=FAIL: Exception: "
+			runObject.logFile.write("ACTION: " + actionName + msg);
+			
+		}
+		
+		
+		
+	}
+}

@@ -1,0 +1,9 @@
+package com.simplytesting.cartax.tests;
+
+import org.testng.annotations.Test;
+
+public class CarTaxTest01NG {
+  @Test
+  public void f() {
+  }
+}

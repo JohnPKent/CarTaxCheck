@@ -1,0 +1,13 @@
+package com.simplytesting.cartax.tests;
+
+import org.testng.annotations.Test;
+
+public class CarTaxTests01 {
+
+	
+	@Test
+	public void InputTests()	{
+		
+	}
+
+}

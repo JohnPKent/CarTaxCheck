@@ -1,0 +1,8 @@
+package com.simplytesting.fw.actions;
+
+public class Click {
+
+	public boolean Synchronise()	{
+		return true;
+	}
+}

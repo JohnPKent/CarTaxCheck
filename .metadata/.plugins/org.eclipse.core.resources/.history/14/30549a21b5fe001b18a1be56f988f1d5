@@ -1,0 +1,52 @@
+package com.simplytesting.cartax.tests;
+
+import java.io.FileInputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Properties;
+
+import org.testng.Assert;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
+
+import com.simplytesting.fw.utils.OutputFile;
+import com.simplytesting.fw.utils.RunObject;
+import com.simplytesting.fw.utils.SeleniumUtils;
+
+public class CarTaxTests01 {
+	private String SOURCE = this.getClass().getSimpleName();
+	private RunObject runObject;
+
+	@BeforeClass
+	public void SetUp()	{
+		if (!initialiseTests())	{
+			String msg = "Unable to initailse.  Failing test.....";
+			Assert.fail(msg);
+		}
+	}
+	
+	@Test
+	public void InputTests()	{
+
+		
+		
+		
+		
+		
+		
+	}
+	@AfterClass
+	public void TearDown()	{
+		
+	}
+	private boolean initialiseTests() {
+		
+		RunObject runObject = new RunObject();
+		return true;
+	
+	}
+
+
+}

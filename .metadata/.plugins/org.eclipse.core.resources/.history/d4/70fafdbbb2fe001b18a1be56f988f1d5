@@ -1,0 +1,95 @@
+package com.simplytesting.cartax.tests;
+
+import java.io.FileInputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Properties;
+
+import org.testng.Assert;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
+
+import com.simplytesting.fw.utils.OutputFile;
+import com.simplytesting.fw.utils.SeleniumUtils;
+
+public class CarTaxTests01 {
+	private static final String SOURCE = "CarTaxTests01";
+	private static String projDir;
+	private String dataDir;
+	private static String sChromeDriverPath;
+	private static int IMPICITWAITTIME;
+
+	private static OutputFile logFile;
+
+	@BeforeClass
+	public void SetUp()	{
+		if (!initialiseTests())	{
+			String msg = "Unable to initailse.  Failing test.....";
+			Assert.fail(msg);
+		}
+			
+		
+	}
+	
+	@Test
+	public void InputTests()	{
+		
+	}
+	@AfterClass
+	public void TearDown()	{
+		
+	}
+	private boolean initialiseTests() {
+		String logsDir;
+		String screenDir;
+		String logFileName;
+		String testFileName;
+		Properties prop = new Properties();
+		try
+		{
+			prop.load(new FileInputStream("./src/config.properties"));
+		}
+		catch(Exception e)
+		{
+			System.console().printf("Unable to load config file.... aborting");
+			return false;
+		}
+		try
+		{
+			logsDir = System.getProperty("user.dir") + "\\test-results\\";
+			screenDir =  logsDir + "screenshots";
+			dataDir = System.getProperty("user.dir") + "\\Data\\";
+			sChromeDriverPath = System.getProperty("user.dir") + ;
+			IMPICITWAITTIME = Integer.parseInt(prop.getProperty("ImplicitWaitTime"));
+
+//			projDir = prop.getProperty("ProjDir").trim();
+//			dataDir = prop.getProperty("DataDir").trim();
+//			logsDir = prop.getProperty("LogsDir").trim();
+//			screenDir =  prop.getProperty("ScreenDir").trim();
+//			sChromeDriverPath = prop.getProperty("ChromeDriver").trim();
+//			IMPICITWAITTIME = Integer.parseInt(prop.getProperty("ImplicitWaitTime"));
+		}
+		catch(Exception e)
+		{
+			System.console().printf("Unable to read a config item.... aborting.  Error:" + e.getMessage());
+			return false;
+		}
+		DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmssSSSS");
+		Date date = new Date();
+		logFileName =  logsDir + "Results_" +  dateFormat.format(date) + ".log";
+		
+		logFile = new  OutputFile(logFileName);
+		logFile.OpenOutputFile();
+		logFile.write(SOURCE, "*********************************************************************************");
+		logFile.write(SOURCE, "*    Starting Tests");
+		logFile.write(SOURCE, "*********************************************************************************");
+		
+		SeleniumUtils seleniumUtil = new SeleniumUtils(logFile);
+		return true;
+	
+	}
+
+
+}

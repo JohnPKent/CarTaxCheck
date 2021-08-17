@@ -1,0 +1,8 @@
+package com.simplytesting.fw.actions;
+
+public class Actions {
+
+	public boolean Synchronise()	{
+		return true;
+	}
+}

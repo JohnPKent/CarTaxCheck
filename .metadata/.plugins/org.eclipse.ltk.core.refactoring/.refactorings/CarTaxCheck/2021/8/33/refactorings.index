@@ -1,0 +1,28 @@
+1629113053084	Rename type 'outputFile'
+1629113063331	Rename type 'inputFile'
+1629113944413	Rename package 'com.simplytesting.actions'
+1629113957520	Rename package 'com.simplytesting.utils'
+1629113983177	Rename package 'com.simplytesting.pages'
+1629113993965	Rename package 'com.simplytesting.tasks'
+1629114012370	Rename package 'com.simplytesting.tests'
+1629114257760	Move file
+1629114266801	Move file
+1629114270909	Delete element
+1629132330625	Rename resource 'Data'
+1629133977879	Move folder
+1629137139921	Rename field 'sChromeDriverPath'
+1629139119549	Move compilation unit
+1629139129888	Delete element
+1629139141108	Delete element
+1629139644728	Delete element
+1629152498531	Rename type 'actions'
+1629153295306	Rename field 'sScreenshotDir'
+1629153669056	Rename type 'Actions'
+1629154854600	Copy compilation unit
+1629154873288	Delete element
+1629154883898	Copy compilation unit
+1629156227515	Copy compilation unit
+1629157179661	Rename type 'SearchString'
+1629157223746	Rename type 'CheckExpectedResultsFile'
+1629157507970	Copy compilation unit
+1629157748190	Copy compilation unit

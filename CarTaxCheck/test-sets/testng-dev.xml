@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="CarTaxCheckSuite" parallel="false">
+  <test name="CarTaxCheck01">
+    <classes>
+      <class name="simplytesting.cartax.tests.CarTaxCheck01"/>
+    </classes>
+  </test>
+</suite>

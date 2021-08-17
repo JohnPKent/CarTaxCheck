@@ -1,0 +1,20 @@
+ProjDir=C:\\Dev\\testautomationdata\\INSHUR\\
+DataDir=C:\\Dev\\testautomationdata\\INSHUR\\Data\\
+LogsDir=C:\\Dev\\testautomationdata\\INSHUR\\Results\\
+ScreenDir=C:\\Dev\\testautomationdata\\INSHUR\\Results\\Bitmaps\\
+DataStoreDir=C:\\Dev\\testautomationdata\\INSHUR\\Data\\DataStore\\
+DataTableDirPath=C:\\Dev\\testautomationdata\\INSHUR\\Data\\DataStore\\DataTables\\
+HTMLTableDir=HTMLTables
+RunListDir=C:\\Dev\\testautomationdata\\INSHUR\\RunFileLists\\
+RunList=FileList_MASTER.txt
+ChromeDriver=C:\\Dev\\LiberationAutomationFWJava\\Selenium\\Drivers\\chromedriver\\chromedriver.exe
+ImplicitWaitTime=60
+Switch_RemoteRun=ON
+
+
+			projDir = prop.getProperty("ProjDir").trim();
+			dataDir = prop.getProperty("DataDir").trim();
+			logsDir = prop.getProperty("LogsDir").trim();
+			screenDir =  prop.getProperty("ScreenDir").trim();
+			sChromeDriverPath = prop.getProperty("ChromeDriver").trim();
+			IMPICITWAITTIME = Integer.parseInt(prop.getProperty("ImplicitWaitTime"));

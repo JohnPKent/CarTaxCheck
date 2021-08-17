@@ -1,0 +1,5 @@
+package com.simplytesting.fw.utils;
+
+public class OutputFile {
+
+}

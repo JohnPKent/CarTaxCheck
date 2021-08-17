@@ -1,0 +1,186 @@
+package com.simplytesting.fw.utils;
+
+import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+
+import java.awt.Rectangle;
+import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+ 
+
+import javax.imageio.ImageIO;
+
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
+
+public class SeleniumUtils {
+    private static final String SOURCE = "    SELENIUM_UTILS";
+	private static  String sScreenshotDir;
+	private static WebDriver driver;
+	private static OutputFile logFile;
+	//************************************************************************************
+	//***                       Test Liberation Framework
+	//***                 Copyright Simply Testing Ltd  2016 to 2019
+	//************************************************************************************
+
+
+	public SeleniumUtils(String sScreenshotDir, OutputFile logFile)
+	{
+		this.sScreenshotDir = sScreenshotDir;
+		this.logFile = logFile;
+	}
+	public static void setDriver(WebDriver Driver)
+	{
+		driver = Driver;
+	}
+	public static WebDriver getDriver()
+	{
+		return driver;
+	}
+	public static void TakePicture()
+	{
+		if (driver == null)
+		{
+			logFile.write(SOURCE, "Driver is not instantiated so not taking picture" );
+			return;
+		}
+
+		DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmssSSSS");
+		Date date = new Date();
+		  
+		String sSSFileName =  sScreenshotDir + "Screenshot_" + dateFormat.format(date) + ".png";
+		try
+		{
+			File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+			// Now you can do whatever you need to do with it, for example copy somewhere
+			/////////////FileUtils.copyFile(scrFile, new File(sSSFileName));			
+			logFile.write(SOURCE, "Picture saved to " + sSSFileName);
+		}
+		catch (Exception e)
+		{
+			 logFile.write(SOURCE, "FAILURE: when taking picture.  Exception:" + e.getMessage());
+		}
+		//TakePicture_FullScreen();
+	}
+	public static void TakePicture_FullScreen()
+	{
+		  DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmssSSSS");
+		  Date date = new Date();
+		  
+		  String sSSFileName =  sScreenshotDir + "ScreenshotFullScr_" + dateFormat.format(date) + ".jpg";
+		  try 
+		  {
+	            Robot robot = new Robot(); 
+	            Rectangle scrRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
+	            BufferedImage screenFullImage = robot.createScreenCapture(scrRect);
+	            ImageIO.write(screenFullImage, "jpg", new File(sSSFileName));
+	             
+				logFile.write(SOURCE, "Picture saved to " + sSSFileName);
+		  }
+			catch (Exception e)
+			{
+				 logFile.write(SOURCE, "FAILURE: when taking full screen picture.  Exception:" + e.getMessage());
+		    }
+	}
+	public static String[] removeBlankArrayItems(String[] sArray)
+	{
+	    //Remove empty items at the end
+		int i;
+    	Boolean bFoundBlank = false;
+		for (i = sArray.length-1; i > 4; i--)
+	    {
+	        if (sArray[i].equals(""))
+	        {
+	        	bFoundBlank = true;
+	        }
+	    }
+		if (bFoundBlank)	{
+			i = i+1;
+			String[] sCopy = new String[i];
+			System.arraycopy(sArray, 0, sCopy, 0, i);
+			return sCopy;
+		}else	{
+			return sArray;
+		}
+	}
+    //************************************************************************************************
+    //Check Methods.
+    //************************************************************************************************
+	public static boolean CheckText(String sAction, String sData, String sText, boolean bCaseIndependant)
+	{
+		String sTextCompare;
+		String sDataCompare;
+        if (bCaseIndependant)
+        {
+        	sTextCompare = sText.toLowerCase();
+        	sDataCompare = sData.toLowerCase();
+            logFile.write(SOURCE, String.format("%s: Performing case independent comparison", sAction));
+        }else
+        {
+        	sTextCompare = sText;
+        	sDataCompare = sData;
+            logFile.write(SOURCE, String.format("%s: Performing case sensitive comparison", sAction));
+        }
+
+        if (sTextCompare.equals(sDataCompare))
+        {
+            logFile.write(SOURCE, String.format("%s=PASS Retrieved Value is: '%s' and it contains '%s'", sAction, sText, sData));
+            return(true);
+        }
+        else    {
+            logFile.write(SOURCE, String.format("%s=FAILURE: Retrieved Value is: '%s' - Expected text is: '%s'", sAction, sText, sData));
+            return(false);
+        }
+
+	}
+	public static boolean CheckTextContains(String sAction, String sData, String sText, boolean bCaseIndependant)
+	{
+		String sTextCompare;
+		String sDataCompare;
+        if (bCaseIndependant)
+        {
+        	sTextCompare = sText.toLowerCase();
+        	sDataCompare = sData.toLowerCase();
+            logFile.write(SOURCE, String.format("%s: Performing case independent comparison", sAction));
+        }else
+        {
+        	sTextCompare = sText;
+        	sDataCompare = sData;
+            logFile.write(SOURCE, String.format("%s: Performing case sensitive comparison", sAction));
+        }
+
+        if (sTextCompare.contains(sDataCompare))
+        {
+            logFile.write(SOURCE, String.format("%s=PASS: Retrieved Value is: '%s' and it contains '%s'", sAction, sText, sData));
+            return(true);
+        }else    
+        {
+            logFile.write(SOURCE, String.format("%s=FAILURE: Retrieved Value is: '%s' - Expected text is: '%s'", sAction, sText, sData));
+            return(false);
+        }
+
+	}
+	public static boolean CheckNumber(String sAction, int dNumberExpected, int dNumberActual)
+	{
+       if (dNumberActual == dNumberExpected)
+        {
+            logFile.write(SOURCE, String.format("%s=PASS Retrieved Value is: '%d' and it equals expected value of '%d'", sAction, dNumberActual, dNumberExpected));
+            return(true);
+        }else    
+        {
+            logFile.write(SOURCE, String.format("%s=FAILURE: Retrieved Value is: '%d' - Expected value is: '%d'", sAction, dNumberActual, dNumberExpected));
+            return(false);
+        }
+
+	}
+	public static boolean CheckDateTime(String sAction, String sData,
+			String sData2, String sText) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+}

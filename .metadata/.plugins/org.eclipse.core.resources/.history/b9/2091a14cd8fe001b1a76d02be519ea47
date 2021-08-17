@@ -1,0 +1,39 @@
+package com.simplytesting.cartax.tasks;
+
+import java.io.IOException;
+
+import com.simplytesting.fw.utils.InputFile;
+import com.simplytesting.fw.utils.OutputFile;
+
+public class CarTax_Tasks {
+	private OutputFile logFile;
+	private String inputFileName;
+	private InputFile inputDataFile;
+	private String expectedResultsFileName;
+	private InputFile expectedResultsFile;
+
+	public CarTax_Tasks(OutputFile logFile)	{
+		this.logFile = logFile;
+	}
+
+	public void setinputFileName(String inFileName)	{
+		this.inputFileName = inFileName;
+	}
+	public void setExpectedDataFile(String inFile)	{
+		this.expectedResultsFileName = inFile;
+	}
+
+	public String getReg(String inFileName)	{
+		this.inputFileName = inFileName;
+		// Open file:
+		inputDataFile = new InputFile(inputFileName);
+		try {
+			String inputFileText = inputDataFile.readAllFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+
+}

@@ -1,0 +1,9 @@
+package com.simplytesting.fw.utils;
+
+import org.openqa.selenium.WebDriver;
+
+public class RunObject {
+	public OutputFile logFile;
+	public WebDriver driver;
+
+}

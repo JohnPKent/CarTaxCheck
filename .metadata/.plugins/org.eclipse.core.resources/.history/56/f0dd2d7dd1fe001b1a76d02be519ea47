@@ -1,0 +1,31 @@
+package com.simplytesting.cartax.tests;
+
+
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openqa.selenium.WebDriver;
+
+import com.simplytesting.fw.utils.RunObject;
+
+public class CarTaxTests01 {
+	private String SOURCE = this.getClass().getSimpleName();
+	private static WebDriver driver;
+	private RunObject runObject;
+
+
+	@Test
+	public void InputTests()	{
+		String regNumber = CarTax_Tasks.getReg()
+		runObject = new RunObject("CarTaxTests01");
+		runObject.StartBrowser();
+		driver = runObject.driver;
+		runObject.NavigateTo(runObject.baseURL);
+		
+		
+	}
+	@AfterClass
+	public static void TearDown()	{
+		driver.quit();	
+	}
+}

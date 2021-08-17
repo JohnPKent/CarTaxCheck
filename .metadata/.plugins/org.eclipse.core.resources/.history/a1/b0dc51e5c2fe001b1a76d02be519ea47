@@ -1,0 +1,106 @@
+package com.simplytesting.fw.utils;
+
+import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+
+import java.awt.Rectangle;
+import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+ 
+
+
+
+
+
+import javax.imageio.ImageIO;
+
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.Assert;
+
+public class SeleniumUtils {
+	private String SOURCE = this.getClass().getSimpleName();
+	private String sScreenshotDir;
+	private WebDriver driver;
+	private OutputFile logFile;
+	//************************************************************************************
+	//***                       Test Liberation Framework
+	//***                 Copyright Simply Testing Ltd  2016 to 2019
+	//************************************************************************************
+
+
+	public SeleniumUtils(OutputFile logFile, String sScreenshotDir)
+	{
+		this.sScreenshotDir = sScreenshotDir;
+		this.logFile = logFile;
+	}
+	public WebDriver getDriver()
+	{
+		return driver;
+	}
+	public void TakePicture()
+	{
+		if (driver == null)
+		{
+			logFile.write(SOURCE, "Driver is not instantiated so not taking picture" );
+			return;
+		}
+
+		DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmssSSSS");
+		Date date = new Date();
+		  
+		String sSSFileName =  sScreenshotDir + "Screenshot_" + dateFormat.format(date) + ".png";
+		try
+		{
+			File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+			// Now you can do whatever you need to do with it, for example copy somewhere
+			/////////////FileUtils.copyFile(scrFile, new File(sSSFileName));			
+			logFile.write(SOURCE, "Picture saved to " + sSSFileName);
+		}
+		catch (Exception e)
+		{
+			 logFile.write(SOURCE, "FAILURE: when taking picture.  Exception:" + e.getMessage());
+		}
+		//TakePicture_FullScreen();
+	}
+	public void TakePicture_FullScreen()
+	{
+		  DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmssSSSS");
+		  Date date = new Date();
+		  
+		  String sSSFileName =  sScreenshotDir + "ScreenshotFullScr_" + dateFormat.format(date) + ".jpg";
+		  try 
+		  {
+	            Robot robot = new Robot(); 
+	            Rectangle scrRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
+	            BufferedImage screenFullImage = robot.createScreenCapture(scrRect);
+	            ImageIO.write(screenFullImage, "jpg", new File(sSSFileName));
+	             
+				logFile.write(SOURCE, "Picture saved to " + sSSFileName);
+		  }
+			catch (Exception e)
+			{
+				 logFile.write(SOURCE, "FAILURE: when taking full screen picture.  Exception:" + e.getMessage());
+		    }
+	}
+	public WebDriver StartBrowser(String chromeDriverPath) {
+		System.setProperty("webdriver.chrome.driver", chromeDriverPath);
+		logFile.write("Starting ChromeDriver");
+		try	{
+			driver = new ChromeDriver();
+			
+		}catch (Exception e)	{
+			String msg = "Failure: unable to start ChromeDriver";
+			logFile.write(msg);
+			Assert.fail(msg);
+		}
+		return driver;
+		
+	}
+}

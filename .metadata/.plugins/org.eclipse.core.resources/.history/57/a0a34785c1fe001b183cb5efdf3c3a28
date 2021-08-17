@@ -1,0 +1,40 @@
+package com.simplytesting.cartax.tests;
+
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
+
+import com.simplytesting.fw.utils.RunObject;
+
+public class CarTaxTests01 {
+	private String SOURCE = this.getClass().getSimpleName();
+	private RunObject runObject;
+
+	@BeforeClass
+	public void SetUp()	{
+		initialiseTests();
+	}
+	
+	@Test
+	public void InputTests()	{
+		
+		
+		
+		
+		
+		
+		
+		
+	}
+	@AfterClass
+	public void TearDown()	{
+		
+	}
+	private void initialiseTests() {
+		RunObject runObject = new RunObject(SOURCE);
+		runObject.StartBrowser();
+	
+	}
+
+
+}
